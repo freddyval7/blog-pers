@@ -1,5 +1,6 @@
 import React from 'react'
 import Navbar from './_components/navbar'
+import Footer from './_components/footer'
 
 export default function DashboardLayout({
     children
@@ -8,6 +9,7 @@ export default function DashboardLayout({
     <div className='h-full'>
         <Navbar />
         {children}
+        <Footer />
     </div>
   )
 }
