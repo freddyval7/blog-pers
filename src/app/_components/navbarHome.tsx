@@ -10,7 +10,7 @@ export default function NavbarHome() {
         <ul>
           <li>
             <Link href="/dashboard">
-              <Button variant={"main"}>Ir al dashboard</Button>
+              <Button variant={"main"}>Go to dashboard</Button>
             </Link>
           </li>
         </ul>
