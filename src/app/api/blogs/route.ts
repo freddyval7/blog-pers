@@ -18,10 +18,10 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { name, description } = await request.json();
+    const { title, description } = await request.json();
 
     const result: ResultMysql = await conn.query("INSERT INTO blog SET ?", {
-      name,
+      title,
       description,
     });
 
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       message: {
         id: result.insertId,
-        name,
+        title,
         description,
       },
     });

@@ -55,13 +55,13 @@ export async function PUT(
   request: Request,
   { params }: { params: { blogId: string } }
 ) {
-  const { name, description } = await request.json();
+  const { title, description } = await request.json();
 
   const result: ResultMysql = await conn.query(
     "UPDATE blog SET ? WHERE id = ?",
     [
       {
-        name,
+        title,
         description,
       },
       params.blogId,
@@ -71,7 +71,7 @@ export async function PUT(
   return NextResponse.json({
     message: {
       id: params.blogId,
-      name,
+      title,
       description,
     },
   });
