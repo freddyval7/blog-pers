@@ -15,6 +15,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import axios from "axios";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   title: z.string(),
@@ -23,6 +24,8 @@ const formSchema = z.object({
 
 export default function BlogForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
@@ -39,6 +42,7 @@ export default function BlogForm() {
       description: "",
     });
     setIsSubmitting(false);
+    router.push("/blogs");
   }
 
   return (
