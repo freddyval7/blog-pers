@@ -1,20 +1,36 @@
 import Image from "next/image";
+import Link from "next/link";
 
-export default function BlogCard() {
+export type BlogCardProps = {
+  id: number;
+  title: string;
+  description?: string;
+  image?: string;
+};
+
+export default function BlogCard({
+  title,
+  description,
+  image,
+  id,
+}: BlogCardProps) {
   return (
-    <div className="flex gap-x-4">
-      <div className="h-full w-full relative">
-        <Image className="rounded-sm" src={"/forest.jpg"} alt="blog img" fill />
+    <Link
+      href={`/blogs/${id}`}
+      className="flex gap-x-4 hover:scale-105 transition-all hover:cursor-pointer"
+    >
+      <div className="h-full w-1/2 relative">
+        <Image
+          className="rounded-sm"
+          src={image ?? "/forest.jpg"}
+          alt="blog img"
+          fill
+        />
       </div>
       <div>
-        <h2 className="font-bold">Blog Title</h2>
-        <p className="line-clamp-3">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore
-          aliquam velit hic ullam animi reiciendis consectetur doloremque quo
-          dolores debitis, facilis odit accusantium mollitia ex assumenda, vitae
-          fuga perferendis blanditiis.
-        </p>
+        <h2 className="font-bold">{title}</h2>
+        <p className="line-clamp-3">{description}</p>
       </div>
-    </div>
+    </Link>
   );
 }
