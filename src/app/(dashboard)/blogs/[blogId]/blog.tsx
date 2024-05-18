@@ -40,7 +40,7 @@ export default function Blog({ blog }: { blog: BlogProps }) {
           <div className="flex items-center justify-between w-full">
             <h1 className="text-2xl font-bold">{blog.title}</h1>
             <div className="flex items-center gap-x-4">
-              <Link href={`/blogs/${blog.id}/edit`}>
+              <Link href={`/blogs/edit/${blog.id}`}>
                 <Pencil className="cursor-pointer hover:scale-105 transition-all hover:opacity-85" />
               </Link>
               <DialogTrigger>
