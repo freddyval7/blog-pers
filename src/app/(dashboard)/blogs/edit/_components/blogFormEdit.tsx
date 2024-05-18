@@ -16,33 +16,38 @@ import { z } from "zod";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { BlogCardProps } from "../../_components/blogCard";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   title: z.string(),
   description: z.string(),
 });
 
-export default function BlogFormEdit() {
+export default function BlogFormEdit({ blog }: { blog: BlogCardProps }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
-      title: "New Blog",
+      title: blog.title,
+      description: blog.description,
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-    const res = await axios.post("/api/blogs", data);
+    const res = await axios.put(`/api/blogs/${blog.id}`, data);
     console.log(res.data);
     form.reset({
       title: "",
       description: "",
     });
     setIsSubmitting(false);
+    toast.success("Blog updated successfully");
     router.push("/blogs");
+    router.refresh();
   }
 
   return (
@@ -75,8 +80,13 @@ export default function BlogFormEdit() {
             </FormItem>
           )}
         />
-        <Button disabled={isSubmitting} className="w-full" variant={"main"} type="submit">
-          Create Blog
+        <Button
+          disabled={isSubmitting}
+          className="w-full"
+          variant={"main"}
+          type="submit"
+        >
+          Edit Blog
         </Button>
       </form>
     </Form>
