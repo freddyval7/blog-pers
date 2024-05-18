@@ -16,6 +16,7 @@ import { z } from "zod";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   title: z.string(),
@@ -42,6 +43,7 @@ export default function BlogForm() {
       description: "",
     });
     setIsSubmitting(false);
+    toast.success("Blog created successfully");
     router.push("/blogs");
   }
 
