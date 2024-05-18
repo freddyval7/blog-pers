@@ -15,7 +15,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import DeleteBlogButton from "./edit/_components/deleteBlog";
+import DeleteBlogButton from "../_components/deleteBlog";
 
 export interface BlogProps extends BlogCardProps {
   user: {

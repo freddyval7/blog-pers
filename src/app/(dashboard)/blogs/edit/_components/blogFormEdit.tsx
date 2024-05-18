@@ -22,7 +22,7 @@ const formSchema = z.object({
   description: z.string(),
 });
 
-export default function BlogForm() {
+export default function BlogFormEdit() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
