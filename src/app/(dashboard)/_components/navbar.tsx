@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import NavbarMobile from "./navbarMobile";
 
 export default function Navbar() {
   const path = usePathname();
@@ -12,7 +13,7 @@ export default function Navbar() {
   return (
     <div className="flex items-center justify-between h-14 px-8">
       <Logo />
-      <nav>
+      <nav className="md:block hidden">
         <ul>
           <li>
             <Link href="/dashboard">
@@ -48,6 +49,9 @@ export default function Navbar() {
             </Link>
           </li>
         </ul>
+      </nav>
+      <nav className="block md:hidden">
+        <NavbarMobile />
       </nav>
     </div>
   );
