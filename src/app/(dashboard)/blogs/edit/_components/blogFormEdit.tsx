@@ -13,18 +13,17 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { BlogCardProps } from "../../_components/blogCard";
 import { toast } from "sonner";
+import axios from "axios";
 
 const formSchema = z.object({
   title: z.string(),
-  description: z.string(),
+  content: z.string(),
 });
 
-export default function BlogFormEdit({ blog }: { blog: BlogCardProps }) {
+export default function BlogFormEdit({ blog }: {blog: {id: number, title: string, content: string}}) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
@@ -32,17 +31,16 @@ export default function BlogFormEdit({ blog }: { blog: BlogCardProps }) {
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       title: blog.title,
-      description: blog.description,
+      content: blog.content,
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-    const res = await axios.put(`/api/blogs/${blog.id}`, data);
-    console.log(res.data);
+    await axios.put(`/api/blogs/${blog.id}`, data);
     form.reset({
       title: "",
-      description: "",
+      content: "",
     });
     setIsSubmitting(false);
     toast.success("Blog updated successfully");
@@ -68,11 +66,11 @@ export default function BlogFormEdit({ blog }: { blog: BlogCardProps }) {
           )}
         />
         <FormField
-          name="description"
+          name="content"
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor={field.name}>Description</FormLabel>
+              <FormLabel htmlFor={field.name}>Content</FormLabel>
               <FormControl>
                 <Textarea {...field} />
               </FormControl>

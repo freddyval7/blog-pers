@@ -1,13 +1,20 @@
-import { loadBlog } from "@/lib/utils";
 import BlogFormEdit from "../_components/blogFormEdit";
-import { BlogCardProps } from "../../_components/blogCard";
+import prisma from "@/lib/prisma";
 
 export default async function EditBlogPage({
   params,
 }: {
   params: { blogId: string };
 }) {
-  const blog: BlogCardProps = await loadBlog(params.blogId);
+  const blog = await prisma.blog.findFirst({
+    where: {
+      id: +params.blogId,
+    },
+  })
+
+  if (!blog) {
+    throw new Error("Blog not found");
+  }
 
   return (
     <div className="w-1/2 md:w-1/3 border-2 rounded-md shadow-md p-8 mx-auto mt-20 space-y-8">

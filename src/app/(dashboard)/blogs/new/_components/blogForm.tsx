@@ -13,14 +13,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import axios from "axios";
 
 const formSchema = z.object({
   title: z.string(),
-  description: z.string(),
+  content: z.string(),
 });
 
 export default function BlogForm() {
@@ -36,11 +36,15 @@ export default function BlogForm() {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
+    console.log(data);
     const res = await axios.post("/api/blogs", data);
-    console.log(res.data);
+    if (res.status !== 200) {
+      setIsSubmitting(false);
+      return toast.error("Failed to create blog");
+    }
     form.reset({
       title: "",
-      description: "",
+      content: "",
     });
     setIsSubmitting(false);
     toast.success("Blog created successfully");
@@ -65,11 +69,11 @@ export default function BlogForm() {
           )}
         />
         <FormField
-          name="description"
+          name="content"
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor={field.name}>Description</FormLabel>
+              <FormLabel htmlFor={field.name}>Content</FormLabel>
               <FormControl>
                 <Textarea {...field} />
               </FormControl>
@@ -77,7 +81,12 @@ export default function BlogForm() {
             </FormItem>
           )}
         />
-        <Button disabled={isSubmitting} className="w-full" variant={"main"} type="submit">
+        <Button
+          disabled={isSubmitting}
+          className="w-full"
+          variant={"main"}
+          type="submit"
+        >
           Create Blog
         </Button>
       </form>

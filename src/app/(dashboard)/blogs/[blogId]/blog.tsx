@@ -73,7 +73,7 @@ export default function Blog({ blog }: { blog: BlogProps }) {
             <p>Freddy Tomada</p>
           </div>
           <p>Published {format(Date.now(), "dd-MM-yyyy")}</p>
-          <p>{blog.description}</p>
+          <p>{blog.content}</p>
         </div>
       </div>
     </Dialog>

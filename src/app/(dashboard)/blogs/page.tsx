@@ -1,11 +1,11 @@
-import { loadBlogs } from "@/lib/utils";
-import BlogCard, { BlogCardProps } from "./_components/blogCard";
+import BlogCard from "./_components/blogCard";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PlusSquare } from "lucide-react";
+import prisma from "@/lib/prisma";
 
 export default async function BlogsPage() {
-  const blogs: BlogCardProps[] = await loadBlogs();
+  const blogs = await prisma.blog.findMany();
 
   return (
     <div className="px-12 h-full">
@@ -26,8 +26,7 @@ export default async function BlogsPage() {
               key={blog.id}
               id={blog.id}
               title={blog.title}
-              description={blog.description}
-              image={blog.image}
+              content={blog.content}
             />
           ))}
         </div>

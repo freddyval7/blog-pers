@@ -4,13 +4,13 @@ import Link from "next/link";
 export type BlogCardProps = {
   id: number;
   title: string;
-  description?: string;
+  content?: string;
   image?: string;
 };
 
 export default function BlogCard({
   title,
-  description,
+  content,
   image,
   id,
 }: BlogCardProps) {
@@ -29,7 +29,7 @@ export default function BlogCard({
       </div>
       <div>
         <h2 className="font-bold">{title}</h2>
-        <p className="line-clamp-3">{description}</p>
+        <p className="line-clamp-3">{content}</p>
       </div>
     </Link>
   );

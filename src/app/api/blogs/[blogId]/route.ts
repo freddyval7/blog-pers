@@ -1,21 +1,22 @@
+import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { conn } from "@/lib/mysql";
-import { ResultMysql } from "@/lib/utils";
 
-export async function GET(
-  request: Request,
+export async function PUT(
+  req: Request,
   { params }: { params: { blogId: string } }
 ) {
+  const data = await req.json();
   try {
-    const result: string = await conn.query("SELECT * FROM blog WHERE id = ?", [
-      params.blogId,
-    ]);
-
-    if (result.length === 0) {
-      return NextResponse.json({ message: "Blog not found" }, { status: 404 });
-    }
-
-    return NextResponse.json(result[0]);
+    await prisma.blog.update({
+      where: {
+        id: +params.blogId,
+      },
+      data: {
+        title: data.title,
+        content: data.content,
+      },
+    });
+    return NextResponse.json({ message: "Blog updated successfully" });
   } catch (error) {
     if (error instanceof Error) {
       console.error(error);
@@ -27,20 +28,16 @@ export async function GET(
 }
 
 export async function DELETE(
-  request: Request,
+  req: Request,
   { params }: { params: { blogId: string } }
 ) {
   try {
-    const result: ResultMysql = await conn.query(
-      "DELETE FROM blog WHERE id = ?",
-      [params.blogId]
-    );
-
-    if (result.affectedRows === 0) {
-      return NextResponse.json({ message: "Blog not found" }, { status: 404 });
-    }
-
-    return new Response(null, { status: 204 });
+    await prisma.blog.delete({
+      where: {
+        id: +params.blogId,
+      },
+    });
+    return NextResponse.json({ message: "Blog deleted successfully" });
   } catch (error) {
     if (error instanceof Error) {
       console.error(error);
@@ -49,30 +46,4 @@ export async function DELETE(
       return NextResponse.json({ message: "Unknown error" });
     }
   }
-}
-
-export async function PUT(
-  request: Request,
-  { params }: { params: { blogId: string } }
-) {
-  const { title, description } = await request.json();
-
-  const result: ResultMysql = await conn.query(
-    "UPDATE blog SET ? WHERE id = ?",
-    [
-      {
-        title,
-        description,
-      },
-      params.blogId,
-    ]
-  );
-
-  return NextResponse.json({
-    message: {
-      id: params.blogId,
-      title,
-      description,
-    },
-  });
 }
