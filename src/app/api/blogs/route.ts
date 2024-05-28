@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request, res: Response) {
@@ -11,6 +12,7 @@ export async function POST(req: Request, res: Response) {
         content: data.content,
       },
     });
+    revalidatePath("/blogs");
     return NextResponse.json({ message: "Blog created successfully" });
   } catch (error) {
     if (error instanceof Error) {
@@ -20,4 +22,5 @@ export async function POST(req: Request, res: Response) {
       return NextResponse.json({ message: "Unknown error" });
     }
   }
+
 }

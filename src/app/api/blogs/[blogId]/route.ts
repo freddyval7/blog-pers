@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function PUT(
@@ -16,6 +17,7 @@ export async function PUT(
         content: data.content,
       },
     });
+    revalidatePath("/blogs");
     return NextResponse.json({ message: "Blog updated successfully" });
   } catch (error) {
     if (error instanceof Error) {
