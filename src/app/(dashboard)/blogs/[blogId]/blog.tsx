@@ -24,7 +24,7 @@ export interface BlogProps extends BlogCardProps {
   };
 }
 
-export default function Blog({ blog }: { blog: BlogProps }) {
+export default function Blog({ blog }: { blog: any }) {
   return (
     <Dialog>
       <div className="flex gap-8 p-8 mx-12 mt-8">
