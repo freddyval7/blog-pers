@@ -39,6 +39,7 @@ export async function DELETE(
         id: +params.blogId,
       },
     });
+    revalidatePath("/blogs");
     return NextResponse.json({ message: "Blog deleted successfully" });
   } catch (error) {
     if (error instanceof Error) {
