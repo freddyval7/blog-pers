@@ -15,50 +15,40 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 const formSchema = z.object({
   username: z.string(),
   email: z.string(),
   password: z.string(),
-  confirmPassword: z.string(),
 });
 
-export default function RegisterForm() {
+export default function LoginForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [validPassword, setValidPassword] = useState(true);
   const form = useForm<z.infer<typeof formSchema>>();
 
   const onSubmit = form.handleSubmit(async (data) => {
     setIsSubmitting(true);
-    if (data.password !== data.confirmPassword) {
-      setValidPassword(false);
+    const res = await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    });
+
+    if (res?.error) {
+      toast.error(res.error);
+      setIsSubmitting(false);
       return;
     }
-    await axios.post("/api/auth/register", data);
-    form.reset();
-    toast.success("User registered successfully");
-    router.push("/login");
-    setIsSubmitting(false);
+
+    router.push("/dashboard");
   });
 
   return (
     <Form {...form}>
       <form className="space-y-6" onSubmit={onSubmit}>
-        <FormField
-          name="username"
-          control={form.control}
-          rules={{ required: "Username is required" }}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={field.name}>Username</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage></FormMessage>
-            </FormItem>
-          )}
-        />
         <FormField
           name="email"
           control={form.control}
@@ -87,29 +77,21 @@ export default function RegisterForm() {
             </FormItem>
           )}
         />
-        <FormField
-          name="confirmPassword"
-          control={form.control}
-          rules={{ required: "Password is required" }}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={field.name}>Confirm Password</FormLabel>
-              <FormControl>
-                <Input type="password" {...field} />
-              </FormControl>
-              <FormMessage>
-                {validPassword ? "" : "Passwords do not match"}
-              </FormMessage>
-            </FormItem>
-          )}
-        />
+        <div>
+          <p>
+            {"Don't"} have an account?{" "}
+            <Link href="/register">
+              <span className="text-purple-500">Register Now</span>
+            </Link>
+          </p>
+        </div>
         <Button
           disabled={isSubmitting}
           className="w-full"
           variant={"main"}
           type="submit"
         >
-          Register
+          Login
         </Button>
       </form>
     </Form>
