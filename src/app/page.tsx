@@ -1,11 +1,12 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
 import NavbarHome from "./_components/navbarHome";
 import Link from "next/link";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { useSession } from "next-auth/react";
 
-export default async function HomePage() {
-  const session = await getServerSession(authOptions);
+export default function HomePage() {
+  const {data: session} = useSession();
 
   return (
     <div className="h-screen">

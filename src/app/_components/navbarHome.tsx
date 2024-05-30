@@ -1,11 +1,12 @@
+"use client"
+
 import Logo from "@/components/logo";
 import { Button } from "@/components/ui/button";
-import { getServerSession } from "next-auth/next";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 
-export default async function NavbarHome() {
-  const session = await getServerSession(authOptions);
+export default function NavbarHome() {
+  const {data: session} = useSession();
 
   return (
     <div className="flex items-center justify-between h-14 px-8">
