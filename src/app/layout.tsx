@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Asap } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import Providers from "./Providers";
 
 const asap = Asap({ subsets: ["latin"], weight: ["400", "500", "600"] });
 
@@ -27,8 +28,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={asap.className}>
-        {children}
-        <Toaster />
+        <Providers>
+          {children}
+          <Toaster />
+        </Providers>
       </body>
     </html>
   );

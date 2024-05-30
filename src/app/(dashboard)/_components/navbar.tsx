@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import NavbarMobile from "./navbarMobile";
+import { signOut } from "next-auth/react";
 
 export default function Navbar() {
   const path = usePathname();
@@ -39,14 +40,17 @@ export default function Navbar() {
               </Button>
             </Link>
             {/* User options */}
-            <Link href="/">
-              <Button
-                className={"hover:font-bold hover:scale-110 transition-all"}
-                variant={"ghost"}
-              >
-                Logout
-              </Button>
-            </Link>
+            <Button
+              onClick={() =>
+                signOut({
+                  callbackUrl: "/",
+                })
+              }
+              className={"hover:font-bold hover:scale-110 transition-all"}
+              variant={"ghost"}
+            >
+              Logout
+            </Button>
           </li>
         </ul>
       </nav>
