@@ -16,7 +16,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import Google from "next-auth/providers/google";
 import { Chrome } from "lucide-react";
 
 const formSchema = z.object({
