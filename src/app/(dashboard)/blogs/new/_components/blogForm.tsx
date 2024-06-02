@@ -36,7 +36,6 @@ export default function BlogForm() {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-    console.log(data);
     const res = await axios.post("/api/blogs", data);
     if (res.status !== 200) {
       setIsSubmitting(false);

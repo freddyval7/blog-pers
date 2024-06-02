@@ -9,14 +9,25 @@ export async function POST(req: Request, res: Response) {
   if (!session) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
-  const user = await prisma.user.findUnique({
+  let user = await prisma.user.findUnique({
     where: {
       email: session.user && session.user.email as string,
     },
   });
 
+  // For Users who signed up with Google
   if (!user) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    await prisma.user.create({
+      data: {
+        username: session.user?.name as string,
+        email: session.user?.email as string,
+      }
+    });
+    user = await prisma.user.findUnique({
+      where: {
+        email: session.user && session.user.email as string,
+      },
+    });
   }
 
   try {
@@ -26,7 +37,7 @@ export async function POST(req: Request, res: Response) {
         content: data.content,
         author: {
           connect: {
-            id: user.id,
+            id: user!.id,
           },
         }
       },
