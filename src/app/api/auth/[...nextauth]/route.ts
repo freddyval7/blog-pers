@@ -28,7 +28,7 @@ const authOptions = {
 
         const matchPassword = await bcrypt.compare(
           credentials.password,
-          userFound.password
+          userFound.password as string
         );
 
         if (!matchPassword) {
