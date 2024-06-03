@@ -17,13 +17,18 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import axios from "axios";
+import { EditBlogPageProps } from "../[blogId]/page";
 
 const formSchema = z.object({
   title: z.string(),
   content: z.string(),
 });
 
-export default function BlogFormEdit({ blog }: {blog: {id: number, title: string, content: string}}) {
+export default function BlogFormEdit({ blog }: {blog: EditBlogPageProps}) {
+  if (!blog) {
+    throw new Error("Blog not found");
+  }
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
@@ -37,7 +42,7 @@ export default function BlogFormEdit({ blog }: {blog: {id: number, title: string
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-    await axios.put(`/api/blogs/${blog.id}`, data);
+    await axios.put(`/api/blogs/${blog?.id}`, data);
     form.reset({
       title: "",
       content: "",

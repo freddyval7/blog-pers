@@ -16,23 +16,21 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import DeleteBlogButton from "../_components/deleteBlog";
+import { BlogPageProps } from "./page";
 
-export interface BlogProps extends BlogCardProps {
-  user: {
-    name: string;
-    avatar: string;
-  };
-}
+export default function Blog({ blog }: { blog: BlogPageProps }) {
+  if (!blog) {
+    throw new Error("Blog not found");
+  }
 
-export default function Blog({ blog }: { blog: any }) {
   return (
     <Dialog>
       <div className="flex gap-8 p-8 mx-12 mt-8">
         <div className="relative w-[30dvw] h-[60dvh]">
           <Image
             className="rounded-md"
-            src={blog.image ?? "/forest.jpg"}
-            alt={blog.title}
+            src={"/forest.jpg"}
+            alt={blog?.title || "Blog Title"}
             fill
           />
         </div>
@@ -70,10 +68,10 @@ export default function Blog({ blog }: { blog: any }) {
             <Avatar>
               <AvatarImage src={"/avatar.png"} alt={"User"} />
             </Avatar>
-            <p>Freddy Tomada</p>
+            <p>{blog.author.username}</p>
           </div>
-          <p>Published {format(Date.now(), "dd-MM-yyyy")}</p>
-          <p>{blog.content}</p>
+          <p>Published {format(blog.createdAt, "dd-MM-yyyy")}</p>
+          <p>{blog?.content}</p>
         </div>
       </div>
     </Dialog>

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PlusSquare } from "lucide-react";
 import prisma from "@/lib/prisma";
-import { getServerSession } from "next-auth";
+import { Session, getServerSession } from "next-auth";
 
 export default async function BlogsPage() {
   const session = await getServerSession();
@@ -11,19 +11,7 @@ export default async function BlogsPage() {
     throw new Error("Unauthorized");
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email: session.user?.email,
-    }
-  });
-
-  const blogs = await prisma.blog.findMany({
-    where: {
-      author: {
-        id: user?.id,
-      }
-    }
-  });
+  const blogs = await getBlogsProps({ session });
 
   return (
     <div className="px-12 h-full">
@@ -52,3 +40,23 @@ export default async function BlogsPage() {
     </div>
   );
 }
+
+async function getBlogsProps({ session }: { session: Session }) {
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user?.email as string,
+    },
+  });
+
+  const blogs = await prisma.blog.findMany({
+    where: {
+      author: {
+        id: user?.id,
+      },
+    },
+  });
+
+  return blogs;
+}
+
+export type BlogsPageProps = Awaited<ReturnType<typeof getBlogsProps>>;
