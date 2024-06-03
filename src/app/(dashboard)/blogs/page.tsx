@@ -3,9 +3,27 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PlusSquare } from "lucide-react";
 import prisma from "@/lib/prisma";
+import { getServerSession } from "next-auth";
 
 export default async function BlogsPage() {
-  const blogs = await prisma.blog.findMany();
+  const session = await getServerSession();
+  if (!session?.user?.email) {
+    throw new Error("Unauthorized");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: session.user?.email,
+    }
+  });
+
+  const blogs = await prisma.blog.findMany({
+    where: {
+      author: {
+        id: user?.id,
+      }
+    }
+  });
 
   return (
     <div className="px-12 h-full">
