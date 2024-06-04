@@ -3,15 +3,15 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PlusSquare } from "lucide-react";
 import prisma from "@/lib/prisma";
-import { Session, getServerSession } from "next-auth";
+import { getServerSession } from "next-auth";
+import SearchBar from "./_components/searchBar";
 
-export default async function BlogsPage() {
-  const session = await getServerSession();
-  if (!session?.user?.email) {
-    throw new Error("Unauthorized");
-  }
+type SearchParams = {
+  search?: string;
+}
 
-  const blogs = await getBlogsProps({ session });
+export default async function BlogsPage(params: {searchParams: SearchParams}) {
+  const blogs = await getBlogsProps(params.searchParams);
 
   return (
     <div className="px-12 h-full">
@@ -25,23 +25,31 @@ export default async function BlogsPage() {
         </Link>
       </div>
       <div className="grid grid-cols-4 gap-8">
-        <div className="border-2 border-black">{/* Filters and Search */}</div>
+        <div className="border-2 border-black">
+            <SearchBar />
+        </div>
         <div className="flex flex-col gap-8 col-span-3">
-          {blogs.map((blog) => (
+          {blogs.length > 0 ? blogs.map((blog) => (
             <BlogCard
               key={blog.id}
               id={blog.id}
               title={blog.title}
               content={blog.content}
             />
-          ))}
+          )) : (
+            <h1 className="text-2xl text-muted-foreground">No blogs found...</h1>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-async function getBlogsProps({ session }: { session: Session }) {
+async function getBlogsProps(params: SearchParams) {
+  const session = await getServerSession();
+  if (!session?.user?.email) {
+    throw new Error("Unauthorized");
+  }
   const user = await prisma.user.findUnique({
     where: {
       email: session.user?.email as string,
@@ -53,6 +61,7 @@ async function getBlogsProps({ session }: { session: Session }) {
       author: {
         id: user?.id,
       },
+      ...(params.search && {title: {contains: params.search}})
     },
   });
 
