@@ -5,9 +5,12 @@ import { PlusSquare } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import SearchBar from "./_components/searchBar";
+import SortMenu from "./_components/sort";
 
 type SearchParams = {
   search?: string;
+  order: "asc" | "desc";
+  date: "newest" | "oldest";
 }
 
 export default async function BlogsPage(params: {searchParams: SearchParams}) {
@@ -25,8 +28,9 @@ export default async function BlogsPage(params: {searchParams: SearchParams}) {
         </Link>
       </div>
       <div className="grid grid-cols-4 gap-8">
-        <div className="border-2 border-black">
+        <div className="border-2 border-black p-4 space-y-6">
             <SearchBar />
+            <SortMenu />
         </div>
         <div className="flex flex-col gap-8 col-span-3">
           {blogs.length > 0 ? blogs.map((blog) => (
@@ -61,7 +65,11 @@ async function getBlogsProps(params: SearchParams) {
       author: {
         id: user?.id,
       },
-      ...(params.search && {title: {contains: params.search}})
+      ...(params.search && {title: {contains: params.search}}),
+    },
+    orderBy: {
+      title: params.order,
+      //createdAt: (params.date === "newest" ? "desc" : "asc"), TODO: Fix this when Prisma supports it
     },
   });
 
