@@ -6,19 +6,25 @@ import prisma from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import SearchBar from "./_components/searchBar";
 import SortMenu from "./_components/sort";
+import SortMenuMobile from "./_components/sortMenuMobile";
 
 type SearchParams = {
   search?: string;
   order: "asc" | "desc";
   date: "newest" | "oldest";
-}
+};
 
-export default async function BlogsPage(params: {searchParams: SearchParams}) {
+export default async function BlogsPage(params: {
+  searchParams: SearchParams;
+}) {
   const blogs = await getBlogsProps(params.searchParams);
 
   return (
     <div className="px-12 h-full">
       <div className="flex items-center">
+        <div className="md:hidden flex items-center">
+          <SortMenuMobile />
+        </div>
         <h1 className="text-4xl my-8 font-bold w-full text-center">Blogs</h1>
         <Link href="/blogs/new">
           <Button variant={"main"}>
@@ -27,21 +33,25 @@ export default async function BlogsPage(params: {searchParams: SearchParams}) {
           </Button>
         </Link>
       </div>
-      <div className="grid grid-cols-4 gap-8">
-        <div className="border-2 border-black p-4 space-y-6">
-            <SearchBar />
-            <SortMenu />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="border-2 rounded-md shadow-lg p-4 space-y-6 md:block hidden">
+          <SearchBar />
+          <SortMenu />
         </div>
         <div className="flex flex-col gap-8 col-span-3">
-          {blogs.length > 0 ? blogs.map((blog) => (
-            <BlogCard
-              key={blog.id}
-              id={blog.id}
-              title={blog.title}
-              content={blog.content}
-            />
-          )) : (
-            <h1 className="text-2xl text-muted-foreground">No blogs found...</h1>
+          {blogs.length > 0 ? (
+            blogs.map((blog) => (
+              <BlogCard
+                key={blog.id}
+                id={blog.id}
+                title={blog.title}
+                content={blog.content}
+              />
+            ))
+          ) : (
+            <h1 className="text-2xl text-muted-foreground">
+              No blogs found...
+            </h1>
           )}
         </div>
       </div>
@@ -65,7 +75,7 @@ async function getBlogsProps(params: SearchParams) {
       author: {
         id: user?.id,
       },
-      ...(params.search && {title: {contains: params.search}}),
+      ...(params.search && { title: { contains: params.search } }),
     },
     orderBy: {
       title: params.order,

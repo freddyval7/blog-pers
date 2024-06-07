@@ -4,9 +4,13 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { SearchIcon, SendHorizonal } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { RefObject, useState } from "react";
 
-export default function SearchBar() {
+export default function SearchBar({
+  closeRef,
+}: {
+  closeRef?: RefObject<HTMLButtonElement>;
+}) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isActive, setIsActive] = useState(false);
@@ -16,6 +20,7 @@ export default function SearchBar() {
     const params = new URLSearchParams();
     params.append("search", searchValue);
     const url = `/blogs?${params.toString()}`;
+    closeRef?.current?.click();
     router.push(url);
   }
 
