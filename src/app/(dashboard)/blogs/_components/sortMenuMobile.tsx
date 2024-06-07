@@ -16,7 +16,7 @@ export default function SortMenuMobile() {
       </DialogTrigger>
       <DialogContent hideCloseButton className="p-4 space-y-6">
         <SearchBar closeRef={closeRef} />
-        <SortMenu />
+        <SortMenu closeRef={closeRef} />
       </DialogContent>
       <DialogClose ref={closeRef} />
     </Dialog>

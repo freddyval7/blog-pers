@@ -9,9 +9,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { RefObject, useState } from "react";
 
-export default function SortMenu() {
+export default function SortMenu({closeRef}: {closeRef?: RefObject<HTMLButtonElement>}) {
   const router = useRouter();
   const [order, setOrder] = useState("");
   const [date, setDate] = useState("");
@@ -21,6 +21,7 @@ export default function SortMenu() {
     if (order !== "") params.append("order", order);
     //if (date !== "") params.append("date", date);
     const url = `/blogs?${params.toString()}`;
+    closeRef?.current?.click();
     router.push(url);
   }
 
