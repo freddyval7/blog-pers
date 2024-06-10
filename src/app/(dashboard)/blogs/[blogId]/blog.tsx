@@ -25,8 +25,8 @@ export default function Blog({ blog }: { blog: BlogPageProps }) {
 
   return (
     <Dialog>
-      <div className="flex gap-8 p-8 mx-12 mt-8">
-        <div className="relative w-[30dvw] h-[60dvh]">
+      <div className="flex flex-col md:flex-row gap-8 p-8 mx-12 mt-8">
+        <div className="relative md:w-[30dvw] md:h-[60dvh] w-[60dvw] h-[30dvh]">
           <Image
             className="rounded-md"
             src={"/forest.jpg"}

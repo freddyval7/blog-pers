@@ -21,13 +21,13 @@ export default async function BlogsPage(params: {
 
   return (
     <div className="px-12 h-full">
-      <div className="flex items-center">
-        <div className="md:hidden flex items-center">
+      <div className="flex items-center flex-wrap relative md:flex-nowrap">
+        <div className="md:hidden flex items-center absolute top-2.5 left-0">
           <SortMenuMobile />
         </div>
-        <h1 className="text-4xl my-8 font-bold w-full text-center">Blogs</h1>
-        <Link href="/blogs/new">
-          <Button variant={"main"}>
+        <h1 className="text-4xl md:my-8 font-bold w-full text-center">Blogs</h1>
+        <Link className="my-6 md:my-0 w-full md:w-auto" href="/blogs/new">
+          <Button className="w-full md:w-auto" variant={"main"}>
             <PlusSquare size={24} className="mr-2" />
             Create Blog
           </Button>
