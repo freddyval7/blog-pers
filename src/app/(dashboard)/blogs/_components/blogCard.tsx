@@ -17,9 +17,9 @@ export default function BlogCard({
   return (
     <Link
       href={`/blogs/${id}`}
-      className="flex gap-x-4 hover:scale-105 transition-all hover:cursor-pointer"
+      className="flex gap-x-6 hover:scale-105 transition-all hover:cursor-pointer"
     >
-      <div className="h-full w-1/2 relative">
+      <div className="h-full min-w-[40%] md:min-w-[20%] relative">
         <Image
           className="rounded-sm"
           src={image ?? "/forest.jpg"}
